@@ -1,0 +1,29 @@
+import lab01
+import lab01re
+import timeit
+import lab0bibl
+import sys
+import io
+# Функция для подавления вывода
+def suppress_output(func):
+    def wrapper(*args, **kwargs):
+        original_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            sys.stdout = original_stdout
+    return wrapper
+# Обёртка для функций с подавлением вывода
+lab01re_silent = suppress_output(lab01re.lab01re)
+lab01_silent = suppress_output(lab01.lab01)
+lab0bibl_silent = suppress_output(lab0bibl.kk)
+# Замер времени выполнения
+execution_time = timeit.timeit(lab01re_silent, number=1)
+print(f"Время выполнения с регулярными выражениями: {execution_time:.8f} секунд")
+
+execution_time = timeit.timeit(lab0bibl_silent, number=1)
+print(f"Время выполнения с использованием библиотеки: {execution_time:.8f} секунд")
+
+execution_time = timeit.timeit(lab01_silent, number=1)
+print(f"Время выполнения без регулярных выражений: {execution_time:.8f} секунд")
