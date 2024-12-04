@@ -1,0 +1,46 @@
+import yaml
+# Чтение YAML данных
+with open('lab0z.yaml', 'r', encoding='utf-8') as yaml_file:
+    yaml_data = yaml.safe_load(yaml_file)
+
+# Преобразование данных в TSV
+def yaml_to_tsv(yaml_data):
+    tsv_lines = []
+
+    # Заголовок таблицы
+    headers = ["Day", "Type", "Subject", "Start Time", "End Time", "Teacher", "Room", "Address"]
+    tsv_lines.append("\t".join(headers))
+
+    # Проход по дням и событиям
+    for day, events in yaml_data.items():
+        for event in events:
+            # Считываем данные события
+            event_type = event.get('type', '')
+            subject = event.get('subject', '')
+            time_data = event.get('time', {})
+            start_time = time_data.get('start', '')
+            end_time = time_data.get('end', '')
+            teacher = event.get('teacher', '')
+            location_data = event.get('location', {})
+            room = location_data.get('room', '')
+            address = location_data.get('address', '')
+
+            # Формируем строку TSV
+            tsv_line = [
+                day,
+                event_type,
+                subject,
+                start_time,
+                end_time,
+                teacher,
+                room,
+                address
+            ]
+            tsv_lines.append("\t".join(tsv_line))
+
+    return "\n".join(tsv_lines)
+
+
+# Конвертируем YAML в TSV
+tsv_data = yaml_to_tsv(yaml_data)
+print(tsv_data)
